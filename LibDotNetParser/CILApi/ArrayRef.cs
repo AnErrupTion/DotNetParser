@@ -1,9 +1,8 @@
-﻿namespace LibDotNetParser.CILApi
+﻿namespace LibDotNetParser.CILApi;
+
+public class ArrayRef
 {
-    public class ArrayRef
-    {
-        public MethodArgStack[] Items;
-        public int Length;
-        public int Index { get; set; }
-    }
+    public MethodArgStack[] Items;
+    public int Length;
+    public int Index { get; set; }
 }

@@ -1,9 +1,8 @@
 ﻿using LibDotNetParser.PE;
 
-namespace LibDotNetParser.DotNet.Tabels
+namespace LibDotNetParser.DotNet.Tabels;
+
+public interface IMetadataTableRow
 {
-    public interface IMetadataTableRow
-    {
-        void Read(MetadataReader reader);
-    }
+    void Read(MetadataReader reader);
 }

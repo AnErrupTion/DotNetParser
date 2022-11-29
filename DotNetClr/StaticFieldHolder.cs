@@ -1,22 +1,19 @@
 ﻿using LibDotNetParser;
 using LibDotNetParser.CILApi;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace libDotNetClr
+namespace libDotNetClr;
+
+internal class StaticFieldHolder
 {
-    internal class StaticFieldHolder
+    public static readonly List<StaticField> staticFields = new();
+}
+internal class StaticField
+{
+    public MethodArgStack value;
+    public DotNetField theField;
+    public override string ToString()
     {
-        public static List<StaticField> staticFields = new List<StaticField>();
-    }
-    internal class StaticField
-    {
-        public MethodArgStack value;
-        public DotNetField theField;
-        public override string ToString()
-        {
-            return "Field: " + theField.ToString() + ", Value: " + theField.ToString();
-        }
+        return "Field: " + theField.ToString() + ", Value: " + theField.ToString();
     }
 }

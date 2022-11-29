@@ -1,43 +1,42 @@
 ﻿using LibDotNetParser;
 using LibDotNetParser.CILApi;
 
-namespace libDotNetClr
+namespace libDotNetClr;
+
+public partial class DotNetClr
 {
-    public partial class DotNetClr
+    private MethodArgStack CreateType(string nameSpace, string TypeName)
     {
-        private MethodArgStack CreateType(string nameSpace, string TypeName)
+        DotNetType ttype = null;
+        foreach (var dll in dlls)
         {
-            DotNetType ttype = null;
-            foreach (var dll in dlls)
+            foreach (var type in dll.Value.Types)
             {
-                foreach (var type in dll.Value.Types)
+                if (type.NameSpace == nameSpace && type.Name == TypeName)
                 {
-                    if (type.NameSpace == nameSpace && type.Name == TypeName)
-                    {
-                        ttype = type;
-                    }
+                    ttype = type;
                 }
             }
-            if (ttype == null)
-            {
-                clrError("Internal: Cannot resolve type: " + nameSpace + "." + TypeName + " Error at CLRInternalMethodsImpl::CreateType", "TypeNotFound");
-                return null;
-            }
-            return CreateType(ttype);
         }
-        private MethodArgStack CreateType(DotNetType type)
+        if (ttype == null)
         {
-            //TODO: Do we need to resolve the constructor?
-            MethodArgStack a = new MethodArgStack() { ObjectContructor = null, ObjectType = type, type = StackItemType.Object, value = Objects.AllocObject().Index };
-            return a;
+            clrError("Internal: Cannot resolve type: " + nameSpace + "." + TypeName + " Error at CLRInternalMethodsImpl::CreateType", "TypeNotFound");
+            return null;
         }
-        private void WriteStringToType(MethodArgStack objectInstance, string property, string value)
-        {
-            Objects.ObjectRefs[(int)objectInstance.value].Fields.Add(property, new MethodArgStack() { type = StackItemType.String, value = value });
-        }
-        private string ReadStringFromType(MethodArgStack objectInstance, string property)
-        {
-            return (string)Objects.ObjectRefs[(int)objectInstance.value].Fields[property].value;
-        }
+        return CreateType(ttype);
+    }
+    private static MethodArgStack CreateType(DotNetType type)
+    {
+        //TODO: Do we need to resolve the constructor?
+        var a = new MethodArgStack() { ObjectContructor = null, ObjectType = type, type = StackItemType.Object, value = Objects.AllocObject().Index };
+        return a;
+    }
+    private static void WriteStringToType(MethodArgStack objectInstance, string property, string value)
+    {
+        Objects.ObjectRefs[(int)objectInstance.value].Fields.Add(property, new MethodArgStack() { type = StackItemType.String, value = value });
+    }
+    private static string ReadStringFromType(MethodArgStack objectInstance, string property)
+    {
+        return (string)Objects.ObjectRefs[(int)objectInstance.value].Fields[property].value;
     }
 }

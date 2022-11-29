@@ -1,13 +1,12 @@
 ﻿using LibDotNetParser;
 using System.Collections.Generic;
 
-namespace libDotNetClr
+namespace libDotNetClr;
+
+internal class ObjectValueHolder
 {
-    internal class ObjectValueHolder
+    public Dictionary<string, MethodArgStack> Fields = new();
+    public ObjectValueHolder()
     {
-        public Dictionary<string, MethodArgStack> Fields = new Dictionary<string, MethodArgStack>();
-        public ObjectValueHolder()
-        {
-        }
     }
 }
